@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Resources\ProductResource;
 use App\Http\Resources\ProductCollection;
 use App\Http\Requests\StoreProductRequest;
+use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 class ProductController extends Controller
@@ -71,6 +72,8 @@ class ProductController extends Controller
     public function destroy(string $id): JsonResponse
     {
         $product = Product::findOrFail($id);
+
+        Gate::authorize('delete_product');
 
         $product->delete();
 

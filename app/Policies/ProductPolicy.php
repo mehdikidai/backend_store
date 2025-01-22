@@ -44,6 +44,6 @@ class ProductPolicy
      */
     public function delete(User $user): bool
     {
-        return $this->hasRole($user, self::GENERAL_ROLES);
+        return $user->roles->pluck('name')->contains(Roles::Admin->value);
     }
 }

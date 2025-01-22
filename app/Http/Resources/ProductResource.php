@@ -25,9 +25,21 @@ class ProductResource extends JsonResource
                 "name" => $this->category->name,
                 "slug" => $this->category->slug,
             ],
-            "createdAt" => $this->created_at->format('M d Y'),
-        ];
+            "colors" => $this->colors->map(function ($color): array {
+                return [
+                    "name" => $color->name,
+                    "hexCode" => $color->hex_code,
+                ];
+            }),
+            "sizes" => $this->sizes->map(function ($size): array {
+                return [
+                    "name" => $size->name,
+                ];
+            }),
 
+            "createdAt" => $this->created_at->format('M d Y'),
+
+        ];
 
     }
 }

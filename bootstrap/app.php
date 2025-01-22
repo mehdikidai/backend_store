@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\AlwaysAcceptJson;
+use App\Http\Middleware\IsAdmin;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -14,6 +15,9 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->group('api', [AlwaysAcceptJson::class]);
+        $middleware->alias([
+            'isAdmin' => IsAdmin::class
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

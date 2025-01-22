@@ -91,7 +91,7 @@ class AuthController extends Controller
             'name' => 'required|string|min:3|max:20',
             'address' => 'required|string|min:10|max:40',
             'city' => 'required|string|min:3|max:50',
-            'phone' => ['required', 'regex:/^\+?[0-9]{10,15}$/','unique:customers,phone']
+            'phone' => ['required', 'regex:/^\+?[0-9]{10,15}$/', 'unique:customers,phone']
         ]);
 
         $user = User::create([
@@ -149,17 +149,60 @@ class AuthController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request): JsonResponse
     {
-        //
+        $id = $request->user()->id;
+
+
+
+        $data = $request->validate([
+            'email' => "required|email|unique:users,email,{$id}",
+            'password' => 'nullable|string|min:8',
+            'name' => 'required|string|min:3|max:20',
+            'address' => 'required|string|min:10|max:40',
+            'city' => 'required|string|min:3|max:50',
+            'phone' => ['required', 'regex:/^\+?[0-9]{10,15}$/', "unique:customers,phone,{$id}"]
+        ]);
+
+        $user = User::findOrFail($id);
+
+        $user->update([
+            'email' => $data['email'],
+            'name' => $data['name'],
+        ]);
+
+        if (!empty($data['password'])) {
+            $user->update([
+                'password' => Hash::make($data['password']),
+            ]);
+        }
+
+        $user->customer()->updateOrCreate(
+            ['user_id' => $user->id],
+            [
+                'address' => $data['address'],
+                'city' => $data['city'],
+                'phone' => $data['phone']
+            ]
+        );
+
+        return response()->json(['message' => 'User updated successfully'], 200);
+
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request): JsonResponse
     {
-        //
+
+        $user = $request->user();
+
+        $user->delete();
+
+        return response()->json(['message' => 'User deleted successfully'], 200);
+
+
     }
 
     /**

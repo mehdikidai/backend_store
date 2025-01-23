@@ -17,7 +17,10 @@ class CategoryController extends Controller
     {
 
         $categories = Cache::remember('categories', now()->addDays(30), function () {
+
+            sleep(10);
             return Category::all('slug', 'name');
+
         });
         return response()->json($categories);
 

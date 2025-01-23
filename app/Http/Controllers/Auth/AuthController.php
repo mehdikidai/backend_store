@@ -86,7 +86,7 @@ class AuthController extends Controller
     public function store(Request $request): UserResource
     {
         $data = $request->validate([
-            'email' => 'required|email|unique:users,email',
+            'email' => 'required|email:rfc,dns|unique:users,email',
             'password' => 'required|string|min:8',
             'name' => 'required|string|min:3|max:20',
             'address' => 'required|string|min:10|max:40',
@@ -156,7 +156,7 @@ class AuthController extends Controller
 
 
         $data = $request->validate([
-            'email' => "required|email|unique:users,email,{$id}",
+            'email' => "required|email:rfc,dns|unique:users,email,{$id}",
             'password' => 'nullable|string|min:8',
             'name' => 'required|string|min:3|max:20',
             'address' => 'required|string|min:10|max:40',

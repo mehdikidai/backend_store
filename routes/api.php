@@ -15,10 +15,13 @@ Route::prefix('products')->group(function (): void {
 
     Route::get('/', [ProductController::class, 'index']);
     Route::get('/{id}', [ProductController::class, 'show']);
-    Route::middleware('auth:sanctum')->group(function (): void {
+
+    Route::middleware(['auth:sanctum', 'role:admin'])->group(function (): void {
+
         Route::delete('/{id}', [ProductController::class, 'destroy']);
         Route::put('/{id}', [ProductController::class, 'update']);
         Route::post('/', [ProductController::class, 'store']);
+
     });
 
 });
@@ -28,13 +31,13 @@ Route::prefix('products')->group(function (): void {
 
 // Start section for categories routes
 
-Route::middleware(['auth:sanctum', 'isAdmin'])->group(function (): void {
+Route::middleware(['auth:sanctum', 'role:admin'])->group(function (): void {
 
     Route::apiResource('categories', CategoryController::class)->except(['index', 'show']);
 
 });
 
-Route::prefix('categories')->group(function () {
+Route::prefix('categories')->group(function (): void {
 
     Route::get('/', [CategoryController::class, 'index']);
     Route::get('/{id}', [CategoryController::class, 'show']);
@@ -47,13 +50,13 @@ Route::prefix('categories')->group(function () {
 
 // Start section for colors routes
 
-Route::middleware(['auth:sanctum', 'isAdmin'])->group(function (): void {
+Route::middleware(['auth:sanctum', 'role:admin,editor'])->group(function (): void {
 
     Route::apiResource('colors', ColorController::class)->except(['index', 'show']);
 
 });
 
-Route::prefix('colors')->group(function () {
+Route::prefix('colors')->group(function (): void {
 
     Route::get('/', [ColorController::class, 'index']);
     Route::get('/{id}', [ColorController::class, 'show']);
@@ -65,13 +68,13 @@ Route::prefix('colors')->group(function () {
 
 // Start section for size routes
 
-Route::middleware(['auth:sanctum', 'isAdmin'])->group(function (): void {
+Route::middleware(['auth:sanctum', 'role:admin'])->group(function (): void {
 
     Route::apiResource('sizes', SizeController::class)->except(['index', 'show']);
 
 });
 
-Route::prefix('sizes')->group(function () {
+Route::prefix('sizes')->group(function (): void {
 
     Route::get('/', [SizeController::class, 'index']);
     Route::get('/{id}', [SizeController::class, 'show']);

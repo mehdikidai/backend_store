@@ -1,15 +1,12 @@
 <?php
 
-use App\Enum\Roles;
-use App\Models\Role;
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
-use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ColorController;
+use App\Http\Controllers\SizeController;
 
-// Route::get('/user', function (Request $request) {
-//     return $request->user();
-// })->middleware('auth:sanctum');
 
 
 // start section for products routes
@@ -27,30 +24,6 @@ Route::prefix('products')->group(function (): void {
 });
 
 // end section for products routes
-
-
-// start section for auth routes
-
-Route::prefix('auth')->group(function (): void {
-
-    Route::post('/register', [AuthController::class, 'store'])->middleware('throttle:10,30');
-    Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:20,30');
-
-    Route::middleware('auth:sanctum')->group(function (): void {
-
-        Route::post('/logout', [AuthController::class, 'logout']);
-        Route::get('/user', [AuthController::class, 'show']);
-        Route::put('/user', [AuthController::class, 'update']);
-        Route::delete('/user', [AuthController::class, 'destroy']);
-        Route::get('/users', [AuthController::class, 'index']);
-        Route::post('/verification', [AuthController::class, 'verification'])->middleware('throttle:10,30');
-
-    });
-
-});
-
-// end section for auth routes
-
 
 
 // Start section for categories routes
@@ -71,3 +44,49 @@ Route::prefix('categories')->group(function () {
 
 // End section for categories routes
 
+
+// Start section for colors routes
+
+Route::middleware(['auth:sanctum', 'isAdmin'])->group(function (): void {
+
+    Route::apiResource('colors', ColorController::class)->except(['index', 'show']);
+
+});
+
+Route::prefix('colors')->group(function () {
+
+    Route::get('/', [ColorController::class, 'index']);
+    Route::get('/{id}', [ColorController::class, 'show']);
+
+});
+
+// End section for colors routes
+
+
+// Start section for size routes
+
+Route::middleware(['auth:sanctum', 'isAdmin'])->group(function (): void {
+
+    Route::apiResource('sizes', SizeController::class)->except(['index', 'show']);
+
+});
+
+Route::prefix('sizes')->group(function () {
+
+    Route::get('/', [SizeController::class, 'index']);
+    Route::get('/{id}', [SizeController::class, 'show']);
+
+});
+
+// End section for size routes
+
+
+
+
+
+
+// start section for auth routes
+
+require_once __DIR__ . '/authApi.php';
+
+// end section for auth routes

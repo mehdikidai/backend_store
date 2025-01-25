@@ -19,7 +19,7 @@ class CheckRole
         $userRoles = $request->user()->roles()->pluck('name');
 
         if (!$userRoles->intersect($roles)->count()) {
-            return response()->json(['message' => 'Access denied: insufficient permissions'], 403);
+            return response()->json(['message' => 'Access denied'], Response::HTTP_FORBIDDEN);
         }
 
         return $next($request);

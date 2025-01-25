@@ -31,7 +31,7 @@ Route::prefix('products')->group(function (): void {
 
 // Start section for categories routes
 
-Route::middleware(['auth:sanctum', 'role:admin'])->group(function (): void {
+Route::middleware(['auth:sanctum', 'role:admin,editor'])->group(function (): void {
 
     Route::apiResource('categories', CategoryController::class)->except(['index', 'show']);
 

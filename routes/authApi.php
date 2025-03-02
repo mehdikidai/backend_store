@@ -9,7 +9,7 @@ use App\Http\Controllers\Auth\AuthController;
 Route::prefix('auth')->group(function (): void {
 
     Route::post('/register', [AuthController::class, 'store'])->middleware('throttle:10,30');
-    Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:20,30');
+    Route::post('/login', [AuthController::class, 'login']); //->middleware('throttle:20,30');
 
     Route::middleware('auth:sanctum')->group(function (): void {
 
